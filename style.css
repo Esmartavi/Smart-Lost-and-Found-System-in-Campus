@@ -206,26 +206,20 @@ body{
 }
 
 .headContent{
-    text-shadow: 1px 1px 1px black, 0 0 1em blue, 0 0 0.2em blue;
+    text-align: center;
+    text-shadow: 0.2px 0.2px 0.2px black, 0 0 1em blue, 0 0 0.2em blue;
     color: rgb(237, 226, 121);
 }
 
 .leftform{
-    background-color: color-gradient( #e3c5d1 , #94E9AE);
+    background: radial-gradient(rgb(199, 199, 231), rgba(251, 174, 143, 0.505));
     max-width: 40%;
     margin-left: 2rem;
     border: 2px solid var(--dark-gray);
     border-radius: 8px;
 }
 
-.leftform:hover{
-    transition: all 0.5s;
-    transform: scale(1.02);
-    box-shadow: 2px 5px rgb(0 0 0 / 20%);
-}
-
-
-#report{
+#report, #found{
     padding: 10%;
     display: flex;
     flex-direction: column;
@@ -233,17 +227,37 @@ body{
 }
 
 .rightform{
+    background: radial-gradient(rgb(199, 199, 231), rgba(143, 251, 177, 0.505));
     max-width: 40%;
     margin-left: 2rem;
     border: 2px solid var(--dark-gray);
     border-radius: 8px;
 }
 
-#found{
-    padding: 10%;
+.leftform:hover,.rightform:hover{
+    transition: all 0.3s;
+    transform: scale(1.01);
+    box-shadow: 1px 1px 6px var(--gray);
+}
+
+.reportform, .rightform{
+    text-align: start;
+}
+
+.submitsection{
     display: flex;
-    flex-direction: column;
-    justify-content: start;
+    justify-content: center;
+}
+
+.submitbutton{
+    background-color: var(--accent-color);
+    width: 5rem;
+    border-radius: 5%;
+}
+
+.submitbutton:hover{
+    transition: all 0.2s;
+    background-color: var(--primary-color);
 }
 
 /* Sections (cards look) */
