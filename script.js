@@ -39,16 +39,7 @@ form.addEventListener('submit', function(event) {
     form.reset();
 });
 
-// Function to update item status (Found <-> Not Found)
-function toggleStatus(id) {
-    // Find the item
-    const itemIndex = itemsArray.findIndex(item => item.id === id);
-    if (itemIndex > -1) {
-        // Swap status
-        itemsArray[itemIndex].status = itemsArray[itemIndex].status === 'Lost' ? 'Found' : 'Lost';
-        renderItems();
-    }
-}
+
 // Function to render all items to the DOM
 function renderItems() {
     // Clear current container
