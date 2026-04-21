@@ -49,3 +49,33 @@ function toggleStatus(id) {
         renderItems();
     }
 }
+// Function to render all items to the DOM
+function renderItems() {
+    // Clear current container
+    itemsContainer.innerHTML = '';
+
+    itemsArray.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        // Determine badge class
+        const badgeClass = item.status === 'Lost' ? 'status-lost' : 'status-found';
+        
+        // Use uploaded image, or a placeholder if none was provided
+        const imageSource = item.photoUrl ? item.photoUrl : 'https://via.placeholder.com/250x200?text=No+Image';
+
+        card.innerHTML = `
+            <img src="${imageSource}" alt="${item.name}">
+            <div class="card-content">
+                <span class="status-badge ${badgeClass}">${item.status}</span>
+                <h3>${item.name}</h3>
+                <p>${item.description}</p>
+                <button class="toggle-btn" onclick="toggleStatus(${item.id})">
+                    Change Status
+                </button>
+            </div>
+        `;
+
+        itemsContainer.appendChild(card);
+    });
+}
