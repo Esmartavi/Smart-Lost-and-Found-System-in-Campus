@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart Lost and Found System in Campus</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -49,23 +50,29 @@
         <!-- Report Form -->
         <section id="report">
           <h2 class="headContent">Report Lost Item</h2><br /><br />
-          <form>
+          <form class="reportform">
             <label>Item Name:</label>
             <input type="text" name="item_name" /><br /><br />
 
             <label>Description:</label>
             <textarea name="description"></textarea><br /><br />
 
-            <label>Date Lost:</label>
-            <input type="date" name="date_lost" /><br /><br />
+            <div class="datechoose">
+              <label>Date Lost:</label>
+              <input type="date" name="date_lost" /><br /><br />
+            </div>
 
-            <label>Location:</label>
+            <label>Location:  </label>
             <input type="text" name="location" /><br /><br />
 
-            <label>Upload Image:</label>
-            <input type="file" /><br /><br />
+            <div class="imagesection">
+              <label>Upload Image:</label>
+              <input type="file" /><br /><br />
+            </div>
 
-            <button type="submit">Submit</button>
+            <div class="submitsection">
+              <button type="submit" class="submitbutton">Submit</button>
+            </div>
           </form>
         </section>
       </div>
@@ -74,23 +81,29 @@
         <!-- Report Found Item -->
         <section id="found">
           <h2 class="headContent">Report Found Item</h2><br /><br />
-          <form>
+          <form class="foundform">
             <label>Item Name:</label>
             <input type="text" /><br /><br />
 
             <label>Description:</label>
             <textarea></textarea><br /><br />
 
-            <label>Date Found:</label>
-            <input type="date" /><br /><br />
+            <div class="datechoose">
+              <label>Date Found:</label>
+              <input type="date" /><br /><br />
+            </div>
 
-            <label>Location Found:</label>
+            <label>Location:  </label>
             <input type="text" /><br /><br />
 
-            <label>Upload Image:</label>
-            <input type="file" /><br /><br />
+            <div class="imagesection">
+              <label>Upload Image:</label>
+              <input type="file" /><br /><br />
+            </div>
 
-            <button type="submit">Submit</button>
+            <div class="submitsection">
+              <button type="submit" class="submitbutton">Submit</button>
+            </div>
           </form>
         </section>
       </div>
