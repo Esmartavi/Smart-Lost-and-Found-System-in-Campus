@@ -9,6 +9,21 @@
     --light-gray: #f0f0f0;
     --gray: #808080;
     --dark-gray: #555;
+    --switch-bg: #f0f0f0;
+    --switch-icon: #555; 
+}
+
+.darkmode{
+    --primary-color: #818CF8;        
+    --accent-color: #60A5FA;         
+    --text-color: #E5E7EB;
+    --link-color: #3B82F6;
+    --background-color: #0F172A;
+    --light-gray: #1E293B;
+    --gray: #94A3B8;
+    --dark-gray: #CBD5E1;
+    --switch-bg: #1E293B;
+    --switch-icon: #E5E7EB;
 }
 
 *{
@@ -25,6 +40,46 @@ body{
     /* background-color: rgb(44, 34, 34); */
     padding: 0.1rem;
 }
+
+.switchbutton{
+    background-color: var(--text-color);
+}
+
+#theme-Switch {
+  height: 50px;
+  width: 50px;
+  padding: 0;
+  border-radius: 50%;
+  background-color: var(--switch-bg);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: fixed;
+  top: 20px;
+  right: 20px;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#theme-Switch svg{
+    fill: var(--switch-icon);
+}
+
+#theme-Switch svg:last-child{
+    display: none;
+}
+
+.darkmode #theme-Switch svg:first-child{
+    display: none;
+}
+
+.darkmode #theme-Switch svg:last-child{
+    display: block;
+}
+
 
 .headerContent{
     max-width: 880px;
