@@ -37,6 +37,15 @@ nav ul li a:focus {
     border-radius: 5px;
 }
 
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 h2 {
     text-align: center;
     margin-bottom: 30px;
@@ -106,5 +115,4 @@ button:active {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background: #fff;
     margin: 30px auto;
-    max-width: 600px;
 }
