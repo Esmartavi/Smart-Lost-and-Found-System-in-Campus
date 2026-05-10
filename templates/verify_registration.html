@@ -24,11 +24,14 @@
 <script>
     function validateOTP() {
         const otp = document.getElementById("otp").value;
+
+        // Check if OTP is a 6-digit number
         const otpPattern = /^\d{6}$/;
         if (!otpPattern.test(otp)) {
             alert("Please enter a valid 6-digit OTP.");
             return false;
         }
+
         return true;
     }
 </script>
