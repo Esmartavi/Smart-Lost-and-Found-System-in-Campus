@@ -1,282 +1,551 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Lost and Found System in Campus</title>
-    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
-    <link rel="stylesheet" href="style.css" />
-    <script type="text/javascript" src="darkmode.js" defer></script>
-  </head>
-  <body>
-    <div class="header">
-      <header class="headerContent">
-        <a href="#logo" class="logo">
-          <img src="logo.png" alt="logo" class="logoIcon" />
-          <span class="logoText"> Smart Lost & Found System </span>
-        </a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Lost & Found System</title>
+  <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="headerContent">
+      <a href="#" class="logo">
+        <svg class="logoIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+          <path d="M11 8v6M8 11h6"/>
+        </svg>
+        <span class="logoText">Smart Lost & Found</span>
+      </a>
 
-        <nav class="nav">
-          <a href="#home" class="navLinks">Home</a>
-          <a href="#lost" class="navLinks">Lost</a>
-          <a href="#found" class="navLinks">Found</a>
-          <a href="#search" class="navLinks">Search</a>
-        </nav>
+      <nav class="nav">
+        <a href="#home" class="navLinks active">Home</a>
+        <a href="#items" class="navLinks">Browse Items</a>
+        <a href="#how-it-works" class="navLinks">How It Works</a>
+        <a href="#contact" class="navLinks">Contact</a>
+      </nav>
 
-        <a href="#contact" class="contactButton"> Contact Us </a>
-
-        <div class="switchbutton" id="theme-Switch">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="#e3e3e3"
-          >
-            <path
-              d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z"
-            />
+      <div class="headerActions">
+        <button class="themeSwitch" id="themeSwitch" aria-label="Toggle theme">
+          <svg class="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
           </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="#e3e3e3"
-          >
-            <path
-              d="M565-395q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Zm-226.5 56.5Q280-397 280-480t58.5-141.5Q397-680 480-680t141.5 58.5Q680-563 680-480t-58.5 141.5Q563-280 480-280t-141.5-58.5ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z"
-            />
+          <svg class="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
           </svg>
+        </button>
+        
+        <div class="authButtons" id="authButtons">
+          <button class="btn btnOutline" id="openLogin">Log In</button>
+          <button class="btn btnPrimary" id="openSignup">Sign Up</button>
         </div>
-      </header>
-    </div>
-
-    <div class="content">
-      <section class="mainSection">
-        <div class="leftMain">
-          <p class="sectionLabel">WELCOME</p>
-          <h2 class="sectionTitle">Campus Item Tracking Portal</h2>
-          <p class="sectionDesc">
-            This system helps students and staff report and find lost items
-            within the campus.
-          </p>
-          <div class="buttonGroup">
-            <a href="#" class="login" id="openLogin">Log In</a>
-
-            <a href="#" class="signup" id="openSignup">Sign Up</a>
-
-            <a href="#" class="reportBtn" id="openReport"> Report Item </a>
+        
+        <div class="userMenu hidden" id="userMenu">
+          <button class="userMenuBtn" id="userMenuBtn">
+            <span class="userAvatar" id="userAvatar">U</span>
+            <span class="userName" id="userName">User</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="userDropdown" id="userDropdown">
+            <a href="#" class="dropdownItem" id="myItemsBtn">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+              </svg>
+              My Reports
+            </a>
+            <button class="dropdownItem" id="logoutBtn">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              Log Out
+            </button>
           </div>
         </div>
+        
+        <button class="mobileMenuBtn" id="mobileMenuBtn">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
 
-        <div class="rightMain">
-          <div class="imageContainer">
-            <img src="side image.png" alt="sectionImage" class="sectionImage" />
+  <!-- Mobile Menu -->
+  <div class="mobileMenu" id="mobileMenu">
+    <nav class="mobileNav">
+      <a href="#home" class="mobileNavLink">Home</a>
+      <a href="#items" class="mobileNavLink">Browse Items</a>
+      <a href="#how-it-works" class="mobileNavLink">How It Works</a>
+      <a href="#contact" class="mobileNavLink">Contact</a>
+    </nav>
+  </div>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="heroContent">
+      <div class="heroText">
+        <span class="heroLabel">CAMPUS LOST & FOUND</span>
+        <h1 class="heroTitle">Lost Something on Campus? We'll Help You Find It</h1>
+        <p class="heroDesc">
+          Report lost items, browse found belongings, and reconnect with your valuables through our smart campus tracking system.
+        </p>
+        <div class="heroCTA">
+          <button class="btn btnPrimary btnLg" id="reportLostBtn">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            Report Lost Item
+          </button>
+          <button class="btn btnAccent btnLg" id="reportFoundBtn">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            Report Found Item
+          </button>
+        </div>
+        <div class="heroStats">
+          <div class="statItem">
+            <span class="statNumber" id="totalItems">0</span>
+            <span class="statLabel">Items Tracked</span>
+          </div>
+          <div class="statItem">
+            <span class="statNumber" id="resolvedItems">0</span>
+            <span class="statLabel">Items Returned</span>
+          </div>
+          <div class="statItem">
+            <span class="statNumber" id="activeUsers">0</span>
+            <span class="statLabel">Active Users</span>
           </div>
         </div>
-      </section>
-    </div>
-
-    <div class="steps">
-      <h2 class="stepsTitle">How It Works</h2>
-      <div class="stepCards">
-        <div class="stepCard">
-          <img src="report.png" alt="report" class="stepIcon" />
-          <h3>Report Lost Item</h3>
-          <p>
-            Fill out a form to report your lost item with details and location.
-          </p>
-        </div>
-
-        <div class="stepCard">
-          <img src="search.png" alt="search" class="stepIcon" />
-          <h3>Search for Items</h3>
-          <p>
-            Browse or search the database of found items to see if yours is
-            listed.
-          </p>
-        </div>
-
-        <div class="stepCard">
-          <img src="contact.png" alt="contact" class="stepIcon" />
-          <h3>Contact Finder</h3>
-          <p>
-            If you find an item, contact the owner through the system to arrange
-            return.
-          </p>
+      </div>
+      <div class="heroImage">
+        <div class="heroImageWrapper">
+          <img src="(https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&q=80)" alt="Campus" />
+          <div class="heroImageOverlay"></div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Search Section -->
-    <section id="search">
-      <h2>Search Lost Items</h2>
-      <form>
-        <label>Keyword:</label><br />
-        <input type="text" /><br /><br />
-
-        <label>Category:</label><br />
-        <select>
-          <option>Electronics</option>
-          <option>Clothing</option>
-          <option>ID Cards</option>
-          <option>Books</option>
-          <option>Others</option></select
-        ><br /><br />
-
-        <button type="submit">Search</button>
+  <!-- Quick Search Bar -->
+  <section class="quickSearch">
+    <div class="searchContainer">
+      <form class="searchForm" id="quickSearchForm">
+        <div class="searchInputWrapper">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input type="text" id="searchInput" placeholder="Search for lost or found items..." />
+        </div>
+        <select id="categoryFilter" class="searchSelect">
+          <option value="all">All Categories</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Clothing">Clothing</option>
+          <option value="ID Cards">ID Cards</option>
+          <option value="Books">Books</option>
+          <option value="Accessories">Accessories</option>
+          <option value="Others">Others</option>
+        </select>
+        <select id="statusFilter" class="searchSelect">
+          <option value="all">All Status</option>
+          <option value="Lost">Lost</option>
+          <option value="Found">Found</option>
+        </select>
+        <button type="submit" class="btn btnPrimary">Search</button>
       </form>
+    </div>
+  </section>
 
-      <h3>Results</h3>
-      <ul>
-        <li>Black Wallet - Lost near Library</li>
-        <li>Blue Backpack - Found in Cafeteria</li>
-      </ul>
-    </section>
+  <!-- Items Grid Section -->
+  <section id="items" class="itemsSection">
+    <div class="sectionHeader">
+      <h2 class="sectionTitle">Recent Reports</h2>
+      <div class="viewToggle">
+        <button class="viewBtn active" data-view="grid" id="gridViewBtn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+          </svg>
+        </button>
+        <button class="viewBtn" data-view="list" id="listViewBtn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"/>
+            <line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/>
+            <line x1="3" y1="12" x2="3.01" y2="12"/>
+            <line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <div class="itemsGrid" id="itemsGrid">
+      <!-- Items will be loaded here dynamically -->
+    </div>
+    
+    <div class="loadingSpinner hidden" id="loadingSpinner">
+      <div class="spinner"></div>
+      <span>Loading items...</span>
+    </div>
+    
+    <div class="emptyState hidden" id="emptyState">
+      <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
+        <line x1="9" y1="9" x2="9.01" y2="9"/>
+        <line x1="15" y1="9" x2="15.01" y2="9"/>
+      </svg>
+      <h3>No items found</h3>
+      <p>Try adjusting your search filters or check back later.</p>
+    </div>
+    
+    <div class="pagination" id="pagination">
+      <!-- Pagination will be rendered here -->
+    </div>
+  </section>
 
-    <hr />
+  <!-- How It Works -->
+  <section id="how-it-works" class="howItWorks">
+    <h2 class="sectionTitle">How It Works</h2>
+    <div class="stepsGrid">
+      <div class="stepCard">
+        <div class="stepNumber">1</div>
+        <div class="stepIcon">
+          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <path d="M14 2v6h6"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <h3>Report an Item</h3>
+        <p>Fill out a quick form with details about your lost or found item, including location and description.</p>
+      </div>
+      
+      <div class="stepCard">
+        <div class="stepNumber">2</div>
+        <div class="stepIcon">
+          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+        </div>
+        <h3>Search & Browse</h3>
+        <p>Browse through reported items or use our smart search to find items matching your lost belongings.</p>
+      </div>
+      
+      <div class="stepCard">
+        <div class="stepNumber">3</div>
+        <div class="stepIcon">
+          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <h3>Connect & Claim</h3>
+        <p>Contact the finder or owner directly through the platform to arrange safe return of items.</p>
+      </div>
+    </div>
+  </section>
 
-    <!-- Contact Section -->
-    <section id="contact">
-      <h2>Contact Us</h2>
-      <form>
-        <label>Name:</label><br />
-        <input type="text" /><br /><br />
-
-        <label>Email:</label><br />
-        <input type="email" /><br /><br />
-
-        <label>Message:</label><br />
-        <textarea></textarea><br /><br />
-
-        <button type="submit">Send</button>
+  <!-- Contact Section -->
+  <section id="contact" class="contactSection">
+    <div class="contactContent">
+      <div class="contactInfo">
+        <h2>Get In Touch</h2>
+        <p>Have questions or need assistance? Reach out to our support team.</p>
+        <div class="contactDetails">
+          <div class="contactItem">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <span>support@campuslostfound.edu</span>
+          </div>
+          <div class="contactItem">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>+1 (555) 123-4567</span>
+          </div>
+          <div class="contactItem">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span>Student Center, Room 101</span>
+          </div>
+        </div>
+      </div>
+      <form class="contactForm" id="contactForm">
+        <div class="formGroup">
+          <label for="contactName">Name</label>
+          <input type="text" id="contactName" placeholder="Your name" required />
+        </div>
+        <div class="formGroup">
+          <label for="contactEmail">Email</label>
+          <input type="email" id="contactEmail" placeholder="your@email.com" required />
+        </div>
+        <div class="formGroup">
+          <label for="contactMessage">Message</label>
+          <textarea id="contactMessage" placeholder="How can we help?" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btnPrimary btnFull">Send Message</button>
       </form>
-    </section>
+    </div>
+  </section>
 
-    <hr />
-
-    <!-- Footer -->
-    <footer>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footerContent">
+      <div class="footerBrand">
+        <div class="logo">
+          <svg class="logoIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+            <path d="M11 8v6M8 11h6"/>
+          </svg>
+          <span class="logoText">Smart Lost & Found</span>
+        </div>
+        <p>Helping campus community reconnect with their belongings since 2024.</p>
+      </div>
+      <div class="footerLinks">
+        <div class="footerColumn">
+          <h4>Quick Links</h4>
+          <a href="#home">Home</a>
+          <a href="#items">Browse Items</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footerColumn">
+          <h4>Support</h4>
+          <a href="#">FAQ</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Report Bug</a>
+        </div>
+      </div>
+    </div>
+    <div class="footerBottom">
       <p>&copy; 2026 Smart Lost & Found System | Campus Project</p>
-    </footer>
-
-    <!-- Login Popup Modal -->
-    <div id="loginModal">
-      <div class="loginCard" style="position: relative">
-        <span id="closeLogin">&times;</span>
-
-        <h2>Login</h2>
-
-        <form>
-          <label>Username</label>
-          <input type="text" placeholder="Enter your username" />
-
-          <label>Password</label>
-          <input type="password" placeholder="Enter your password" />
-
-          <div class="extraOptions">
-            <div class="rememberme">
-              <input type="checkbox" id="remember" />
-              <label for="remember">Remember me</label>
-            </div>
-            <a href="#">Forgot Password?</a>
-          </div>
-
-          <button type="submit">Login</button>
-
-          <div class="registerText">
-            Don't have an account? <a href="#">Register</a>
-          </div>
-        </form>
-      </div>
     </div>
+  </footer>
 
-    <!-- SIGNUP MODAL -->
-    <div id="signupModal">
-      <div class="loginCard">
-        <span id="closeSignup">&times;</span>
+  <!-- Login Modal -->
+  <div class="modal" id="loginModal">
+    <div class="modalOverlay"></div>
+    <div class="modalContent glassMorphism">
+      <button class="modalClose" id="closeLogin">&times;</button>
+      <div class="modalHeader">
+        <h2>Welcome Back</h2>
+        <p>Sign in to your account</p>
+      </div>
+      <form id="loginForm" class="modalForm">
+        <div class="formGroup">
+          <label for="loginUsername">Username or Email</label>
+          <input type="text" id="loginUsername" placeholder="Enter username or email" required />
+        </div>
+        <div class="formGroup">
+          <label for="loginPassword">Password</label>
+          <div class="passwordWrapper">
+            <input type="password" id="loginPassword" placeholder="Enter password" required />
+            <button type="button" class="togglePassword" data-target="loginPassword">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="formOptions">
+          <label class="checkbox">
+            <input type="checkbox" id="rememberMe" />
+            <span>Remember me</span>
+          </label>
+          <a href="#" class="forgotPassword">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn btnPrimary btnFull">Sign In</button>
+        <p class="formFooter">
+          Don't have an account? <a href="#" id="goToSignup">Create one</a>
+        </p>
+      </form>
+    </div>
+  </div>
 
+  <!-- Signup Modal -->
+  <div class="modal" id="signupModal">
+    <div class="modalOverlay"></div>
+    <div class="modalContent glassMorphism">
+      <button class="modalClose" id="closeSignup">&times;</button>
+      <div class="modalHeader">
         <h2>Create Account</h2>
-
-        <form id="signupForm">
-          <label>Username</label>
-          <input
-            type="text"
-            id="signupUsername"
-            placeholder="Enter unique username"
-            required
-          />
-
-          <label>Email</label>
-          <input
-            type="email"
-            id="signupEmail"
-            placeholder="Enter your email"
-            required
-          />
-
-          <label>Password</label>
-          <input
-            type="password"
-            id="signupPassword"
-            placeholder="Create password"
-            required
-          />
-
-          <button type="submit">Sign Up</button>
-
-          <div class="registerText">
-            Already have an account?
-            <a href="#" id="goToLogin">Login</a>
+        <p>Join our campus community</p>
+      </div>
+      <form id="signupForm" class="modalForm">
+        <div class="formGroup">
+          <label for="signupUsername">Username</label>
+          <input type="text" id="signupUsername" placeholder="Choose a username" minlength="3" required />
+        </div>
+        <div class="formGroup">
+          <label for="signupEmail">Email</label>
+          <input type="email" id="signupEmail" placeholder="your@email.com" required />
+        </div>
+        <div class="formGroup">
+          <label for="signupPassword">Password</label>
+          <div class="passwordWrapper">
+            <input type="password" id="signupPassword" placeholder="Create password (min 6 chars)" minlength="6" required />
+            <button type="button" class="togglePassword" data-target="signupPassword">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
           </div>
-        </form>
+        </div>
+        <div class="formGroup">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="passwordWrapper">
+            <input type="password" id="confirmPassword" placeholder="Confirm your password" minlength="6" required />
+            <button type="button" class="togglePassword" data-target="confirmPassword">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="btn btnPrimary btnFull">Create Account</button>
+        <p class="formFooter">
+          Already have an account? <a href="#" id="goToLogin">Sign in</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Report Item Modal -->
+  <div class="modal" id="reportModal">
+    <div class="modalOverlay"></div>
+    <div class="modalContent modalLarge glassMorphism">
+      <button class="modalClose" id="closeReport">&times;</button>
+      <div class="modalHeader">
+        <h2 id="reportModalTitle">Report Item</h2>
+        <p>Provide details about the item</p>
+      </div>
+      <form id="reportForm" class="modalForm" enctype="multipart/form-data">
+        <input type="hidden" id="reportType" value="Lost" />
+        <div class="formRow">
+          <div class="formGroup">
+            <label for="itemName">Item Name *</label>
+            <input type="text" id="itemName" placeholder="e.g., Blue Backpack" required />
+          </div>
+          <div class="formGroup">
+            <label for="itemCategory">Category *</label>
+            <select id="itemCategory" required>
+              <option value="">Select category</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Clothing">Clothing</option>
+              <option value="ID Cards">ID Cards</option>
+              <option value="Books">Books</option>
+              <option value="Accessories">Accessories</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
+        </div>
+        <div class="formGroup">
+          <label for="itemDescription">Description *</label>
+          <textarea id="itemDescription" rows="3" placeholder="Describe the item in detail (color, brand, distinguishing features...)" required></textarea>
+        </div>
+        <div class="formRow">
+          <div class="formGroup">
+            <label for="itemLocation">Location *</label>
+            <input type="text" id="itemLocation" placeholder="e.g., Library, Building A" required />
+          </div>
+          <div class="formGroup">
+            <label for="itemDate">Date</label>
+            <input type="date" id="itemDate" />
+          </div>
+        </div>
+        <div class="formRow">
+          <div class="formGroup">
+            <label for="contactEmail">Contact Email *</label>
+            <input type="email" id="itemContactEmail" placeholder="your@email.com" required />
+          </div>
+          <div class="formGroup">
+            <label for="contactPhone">Contact Phone (Optional)</label>
+            <input type="tel" id="itemContactPhone" placeholder="+1 (555) 123-4567" />
+          </div>
+        </div>
+        <div class="formGroup">
+          <label for="itemPhoto">Upload Photo</label>
+          <div class="fileUpload">
+            <input type="file" id="itemPhoto" accept="image/*" />
+            <div class="fileUploadPlaceholder" id="fileUploadPlaceholder">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <span>Click to upload or drag and drop</span>
+              <small>PNG, JPG, WEBP up to 5MB</small>
+            </div>
+            <img id="imagePreview" class="imagePreview hidden" alt="Preview" />
+          </div>
+        </div>
+        <button type="submit" class="btn btnPrimary btnFull">Submit Report</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Item Detail Modal -->
+  <div class="modal" id="itemDetailModal">
+    <div class="modalOverlay"></div>
+    <div class="modalContent modalLarge glassMorphism">
+      <button class="modalClose" id="closeItemDetail">&times;</button>
+      <div id="itemDetailContent">
+        <!-- Item details will be loaded here -->
       </div>
     </div>
+  </div>
 
-    <!-- REPORT MODAL -->
-
-    <div id="reportModal">
-      <div class="reportCard">
-        <span id="closeReport">&times;</span>
-
-        <h2>Report Lost / Found Item</h2>
-
-        <form id="itemForm">
-          <label>Item Name</label>
-          <input
-            type="text"
-            id="itemName"
-            placeholder="Enter item name"
-            required
-          />
-
-          <label>Description</label>
-          <textarea
-            id="itemDescription"
-            placeholder="Describe the item"
-            required
-          ></textarea>
-
-          <label>Status</label>
-
-          <select id="itemStatus">
-            <option value="Lost">Lost</option>
-
-            <option value="Found">Found</option>
-          </select>
-
-          <label>Upload Photo</label>
-
-          <input type="file" id="itemPhoto" accept="image/*" />
-
-          <button type="submit">Submit Report</button>
-        </form>
+  <!-- My Items Modal -->
+  <div class="modal" id="myItemsModal">
+    <div class="modalOverlay"></div>
+    <div class="modalContent modalLarge glassMorphism">
+      <button class="modalClose" id="closeMyItems">&times;</button>
+      <div class="modalHeader">
+        <h2>My Reported Items</h2>
+        <p>Manage your lost and found reports</p>
+      </div>
+      <div id="myItemsList" class="myItemsList">
+        <!-- User's items will be loaded here -->
       </div>
     </div>
+  </div>
 
-    <div id="toast"></div>
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <div class="toastIcon"></div>
+    <span class="toastMessage"></span>
+  </div>
 
-    <script src="index.js"></script>
-  </body>
+  <script src="script.js"></script>
+</body>
 </html>
