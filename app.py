@@ -25,9 +25,9 @@ app.config['SECURITY_PASSWORD_SALT'] = os.environ.get('SECURITY_PASSWORD_SALT', 
 app.config['MONGO_URI'] = os.environ.get('MONGO_URI', 'mongodb+srv://kishan9798760468_db_user:joGeYTKH1bfd9neF@cluster0.nro9z2t.mongodb.net/lost_found_db?appName=Cluster0')
 app.config['UPLOAD_FOLDER'] = os.path.join('static', 'images')
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
-# Gmail SMTP — sends OTP to ANY email address for free
-GMAIL_USER     = os.environ.get('GMAIL_USER', '')      # your Gmail address
-GMAIL_PASSWORD = os.environ.get('GMAIL_PASSWORD', '')  # Gmail App Password (16 chars)
+# Gmail SMTP — reads MAIL_USERNAME and MAIL_PASSWORD from environment
+GMAIL_USER     = os.environ.get('MAIL_USERNAME', '')
+GMAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', '')
 BREVO_FROM_NAME = 'Smart Lost & Found'
 
 # Cloudinary — persistent image storage (free tier: 25GB)
@@ -144,8 +144,8 @@ def generate_otp():
 
 def _send_email(to_email, subject, html_body):
     """Send email via Gmail SMTP. Works for ANY email address — completely free."""
-    gmail_user = os.environ.get('GMAIL_USER', GMAIL_USER)
-    gmail_pass = os.environ.get('GMAIL_PASSWORD', GMAIL_PASSWORD)
+    gmail_user = os.environ.get('MAIL_USERNAME', GMAIL_USER)
+    gmail_pass = os.environ.get('MAIL_PASSWORD', GMAIL_PASSWORD)
     if not gmail_user or not gmail_pass:
         print("Gmail credentials not set — skipping email")
         return False
