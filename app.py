@@ -12,6 +12,9 @@ import random
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 import requests
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import cloudinary
 import cloudinary.uploader
 from models import User, ItemStatusEnum, CourseEnum, BranchEnum
@@ -22,9 +25,9 @@ app.config['SECURITY_PASSWORD_SALT'] = os.environ.get('SECURITY_PASSWORD_SALT', 
 app.config['MONGO_URI'] = os.environ.get('MONGO_URI', 'mongodb+srv://kishan9798760468_db_user:joGeYTKH1bfd9neF@cluster0.nro9z2t.mongodb.net/lost_found_db?appName=Cluster0')
 app.config['UPLOAD_FOLDER'] = os.path.join('static', 'images')
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
-# Brevo (Sendinblue) API — 300 free emails/day to ANY email, no domain needed
-BREVO_API_KEY = os.environ.get('BREVO_API_KEY', 're_KnsbyW3t_ERF9txWhNyGUsmr3USY8LpFF')
-BREVO_FROM_EMAIL = os.environ.get('BREVO_FROM_EMAIL', 'shashishe2160@gmail.com')
+# Gmail SMTP — sends OTP to ANY email address for free
+GMAIL_USER     = os.environ.get('GMAIL_USER', '')      # your Gmail address
+GMAIL_PASSWORD = os.environ.get('GMAIL_PASSWORD', '')  # Gmail App Password (16 chars)
 BREVO_FROM_NAME = 'Smart Lost & Found'
 
 # Cloudinary — persistent image storage (free tier: 25GB)
@@ -140,36 +143,25 @@ def generate_otp():
     return f"{random.randint(100000, 999999)}"
 
 def _send_email(to_email, subject, html_body):
-    """Send email via Resend HTTP API. Returns True on success, False on failure."""
-    api_key = os.environ.get('BREVO_API_KEY', 're_KnsbyW3t_ERF9txWhNyGUsmr3USY8LpFF')
-    if not api_key:
-        print("Resend API key not set — skipping email")
+    """Send email via Gmail SMTP. Works for ANY email address — completely free."""
+    gmail_user = os.environ.get('GMAIL_USER', GMAIL_USER)
+    gmail_pass = os.environ.get('GMAIL_PASSWORD', GMAIL_PASSWORD)
+    if not gmail_user or not gmail_pass:
+        print("Gmail credentials not set — skipping email")
         return False
     try:
-        response = requests.post(
-            'https://api.resend.com/emails',
-            headers={
-                'Authorization': f'Bearer {api_key}',
-                'Content-Type': 'application/json',
-                'User-Agent': 'Mozilla/5.0 (compatible; SmartLostFound/1.0)'
-            },
-            json={
-                'from': 'Smart Lost & Found <onboarding@resend.dev>',
-                'to': [to_email],
-                'subject': subject,
-                'html': html_body
-            },
-            timeout=15
-        )
-        print(f"Resend response {response.status_code}: {response.text}")
-        if response.status_code in (200, 201):
-            print(f"Email sent to {to_email} via Resend")
-            return True
-        else:
-            print(f"Resend error {response.status_code}: {response.text}")
-            return False
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From']    = f'Smart Lost & Found <{gmail_user}>'
+        msg['To']      = to_email
+        msg.attach(MIMEText(html_body, 'html'))
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=15) as server:
+            server.login(gmail_user, gmail_pass)
+            server.sendmail(gmail_user, to_email, msg.as_string())
+        print(f"Email sent to {to_email} via Gmail SMTP")
+        return True
     except Exception as e:
-        print(f"Failed to send email via Resend: {e}")
+        print(f"Failed to send email via Gmail SMTP: {e}")
         return False
 
 def send_otp_reg(email, otp):
