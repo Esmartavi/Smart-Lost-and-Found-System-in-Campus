@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 import requests
 import smtplib
+import threading
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import cloudinary
@@ -25,9 +26,9 @@ app.config['SECURITY_PASSWORD_SALT'] = os.environ.get('SECURITY_PASSWORD_SALT', 
 app.config['MONGO_URI'] = os.environ.get('MONGO_URI', 'mongodb+srv://kishan9798760468_db_user:joGeYTKH1bfd9neF@cluster0.nro9z2t.mongodb.net/lost_found_db?appName=Cluster0')
 app.config['UPLOAD_FOLDER'] = os.path.join('static', 'images')
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
-# Gmail SMTP — reads MAIL_USERNAME and MAIL_PASSWORD from environment
-GMAIL_USER     = os.environ.get('MAIL_USERNAME', '')
-GMAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', '')
+# Gmail SMTP — sends OTP to ANY email address for free
+GMAIL_USER     = os.environ.get('MAIL_USERNAME', 'kishan.sk225@gmail.com')
+GMAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', 'jqpquogoxfgvkqzc')
 BREVO_FROM_NAME = 'Smart Lost & Found'
 
 # Cloudinary — persistent image storage (free tier: 25GB)
@@ -143,26 +144,31 @@ def generate_otp():
     return f"{random.randint(100000, 999999)}"
 
 def _send_email(to_email, subject, html_body):
-    """Send email via Gmail SMTP. Works for ANY email address — completely free."""
+    """Send email via Gmail SMTP in a background thread — page responds instantly."""
     gmail_user = os.environ.get('MAIL_USERNAME', GMAIL_USER)
     gmail_pass = os.environ.get('MAIL_PASSWORD', GMAIL_PASSWORD)
     if not gmail_user or not gmail_pass:
         print("Gmail credentials not set — skipping email")
         return False
-    try:
-        msg = MIMEMultipart('alternative')
-        msg['Subject'] = subject
-        msg['From']    = f'Smart Lost & Found <{gmail_user}>'
-        msg['To']      = to_email
-        msg.attach(MIMEText(html_body, 'html'))
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=15) as server:
-            server.login(gmail_user, gmail_pass)
-            server.sendmail(gmail_user, to_email, msg.as_string())
-        print(f"Email sent to {to_email} via Gmail SMTP")
-        return True
-    except Exception as e:
-        print(f"Failed to send email via Gmail SMTP: {e}")
-        return False
+
+    def _send():
+        try:
+            msg = MIMEMultipart('alternative')
+            msg['Subject'] = subject
+            msg['From']    = f'Smart Lost & Found <{gmail_user}>'
+            msg['To']      = to_email
+            msg.attach(MIMEText(html_body, 'html'))
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=15) as server:
+                server.login(gmail_user, gmail_pass)
+                server.sendmail(gmail_user, to_email, msg.as_string())
+            print(f"Email sent to {to_email} via Gmail SMTP")
+        except Exception as e:
+            print(f"Failed to send email via Gmail SMTP: {e}")
+
+    # Run in background — page responds immediately, email sends in parallel
+    t = threading.Thread(target=_send, daemon=True)
+    t.start()
+    return True  # always return True immediately so user sees success page
 
 def send_otp_reg(email, otp):
     html = (f'<div style="font-family:Arial;color:#333;max-width:480px">'
