@@ -12,10 +12,7 @@ import random
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 import requests
-import smtplib
 import threading
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import cloudinary
 import cloudinary.uploader
 from models import User, ItemStatusEnum, CourseEnum, BranchEnum
@@ -26,10 +23,10 @@ app.config['SECURITY_PASSWORD_SALT'] = os.environ.get('SECURITY_PASSWORD_SALT', 
 app.config['MONGO_URI'] = os.environ.get('MONGO_URI', 'mongodb+srv://kishan9798760468_db_user:joGeYTKH1bfd9neF@cluster0.nro9z2t.mongodb.net/lost_found_db?appName=Cluster0')
 app.config['UPLOAD_FOLDER'] = os.path.join('static', 'images')
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
-# Gmail SMTP — sends OTP to ANY email address for free
-GMAIL_USER     = os.environ.get('MAIL_USERNAME', 'kishan.sk225@gmail.com')
-GMAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', 'jqpquogoxfgvkqzc')
-BREVO_FROM_NAME = 'Smart Lost & Found'
+# Brevo (email) — sends OTP to ANY email address, 300 free emails/day
+BREVO_API_KEY   = os.environ.get('BREVO_API_KEY',   'xkeysib-5105b6517277058bc01b9be5a9d6f2aa209448093d54642eb94cbf5e1cea142d-u031lCtaAraqAjJbn')
+BREVO_FROM_EMAIL = os.environ.get('BREVO_FROM_EMAIL', 'kishan.sk225@gmail.com')
+BREVO_FROM_NAME  = 'Smart Lost & Found'
 
 # Cloudinary — persistent image storage (free tier: 25GB)
 cloudinary.config(
@@ -144,31 +141,36 @@ def generate_otp():
     return f"{random.randint(100000, 999999)}"
 
 def _send_email(to_email, subject, html_body):
-    """Send email via Gmail SMTP in a background thread — page responds instantly."""
-    gmail_user = os.environ.get('MAIL_USERNAME', GMAIL_USER)
-    gmail_pass = os.environ.get('MAIL_PASSWORD', GMAIL_PASSWORD)
-    if not gmail_user or not gmail_pass:
-        print("Gmail credentials not set — skipping email")
+    """Send email via Brevo HTTP API in background thread — page responds instantly."""
+    api_key    = os.environ.get('BREVO_API_KEY',    BREVO_API_KEY)
+    from_email = os.environ.get('BREVO_FROM_EMAIL', BREVO_FROM_EMAIL)
+    if not api_key:
+        print("BREVO_API_KEY not set — skipping email")
         return False
 
     def _send():
         try:
-            msg = MIMEMultipart('alternative')
-            msg['Subject'] = subject
-            msg['From']    = f'Smart Lost & Found <{gmail_user}>'
-            msg['To']      = to_email
-            msg.attach(MIMEText(html_body, 'html'))
-            with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=15) as server:
-                server.login(gmail_user, gmail_pass)
-                server.sendmail(gmail_user, to_email, msg.as_string())
-            print(f"Email sent to {to_email} via Gmail SMTP")
+            response = requests.post(
+                'https://api.brevo.com/v3/smtp/email',
+                headers={'api-key': api_key, 'Content-Type': 'application/json'},
+                json={
+                    'sender': {'name': BREVO_FROM_NAME, 'email': from_email},
+                    'to': [{'email': to_email}],
+                    'subject': subject,
+                    'htmlContent': html_body
+                },
+                timeout=15
+            )
+            if response.status_code in (200, 201):
+                print(f"Email sent to {to_email} via Brevo")
+            else:
+                print(f"Brevo error {response.status_code}: {response.text}")
         except Exception as e:
-            print(f"Failed to send email via Gmail SMTP: {e}")
+            print(f"Brevo email failed: {e}")
 
-    # Run in background — page responds immediately, email sends in parallel
     t = threading.Thread(target=_send, daemon=True)
     t.start()
-    return True  # always return True immediately so user sees success page
+    return True  # return immediately so page doesn't wait
 
 def send_otp_reg(email, otp):
     html = (f'<div style="font-family:Arial;color:#333;max-width:480px">'
