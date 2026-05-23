@@ -23,7 +23,7 @@ app.config['MONGO_URI'] = os.environ.get('MONGO_URI', 'mongodb+srv://kishan97987
 app.config['UPLOAD_FOLDER'] = os.path.join('static', 'images')
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 # Brevo (Sendinblue) API — 300 free emails/day to ANY email, no domain needed
-BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')
+BREVO_API_KEY = os.environ.get('BREVO_API_KEY', 're_KnsbyW3t_ERF9txWhNyGUsmr3USY8LpFF')
 BREVO_FROM_EMAIL = os.environ.get('BREVO_FROM_EMAIL', 'shashishe2160@gmail.com')
 BREVO_FROM_NAME = 'Smart Lost & Found'
 
@@ -141,24 +141,27 @@ def generate_otp():
 
 def _send_email(to_email, subject, html_body):
     """Send email via Resend HTTP API. Returns True on success, False on failure."""
-    if not BREVO_API_KEY:
-        print("API_KEY not set — skipping email")
+    api_key = os.environ.get('BREVO_API_KEY', 're_KnsbyW3t_ERF9txWhNyGUsmr3USY8LpFF')
+    if not api_key:
+        print("Resend API key not set — skipping email")
         return False
     try:
         response = requests.post(
             'https://api.resend.com/emails',
             headers={
-                'Authorization': f'Bearer {BREVO_API_KEY}',
-                'Content-Type': 'application/json'
+                'Authorization': f'Bearer {api_key}',
+                'Content-Type': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (compatible; SmartLostFound/1.0)'
             },
             json={
-                'from': f'{BREVO_FROM_NAME} <onboarding@resend.dev>',
+                'from': 'Smart Lost & Found <onboarding@resend.dev>',
                 'to': [to_email],
                 'subject': subject,
                 'html': html_body
             },
-            timeout=10
+            timeout=15
         )
+        print(f"Resend response {response.status_code}: {response.text}")
         if response.status_code in (200, 201):
             print(f"Email sent to {to_email} via Resend")
             return True
